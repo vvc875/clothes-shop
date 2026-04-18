@@ -13,31 +13,31 @@ const LoginScreen = () => {
         e.preventDefault();
         setError("");
         try {
-            const { data } = await axios.post(
-                "http://localhost:5000/api/users/login",
-                { email, password },
-            );
+            // Đã xóa http://localhost:5000 vì đã có Vite Proxy lo việc nối đuôi
+            const { data } = await axios.post("/api/users/login", { email, password });
+            
             localStorage.setItem("userInfo", JSON.stringify(data));
 
+            // PHÂN QUYỀN ĐIỀU HƯỚNG CHUẨN
             if (data.isAdmin) {
-                navigate("/admin/productlist");
+                navigate("/admin/dashboard"); // Admin thì vào trang quản trị
             } else {
-                alert("Bạn là khách hàng, hiện tại chưa có trang cho bạn!");
+                navigate("/home"); // Khách hàng thì đẩy thẳng ra màn hình Trang chủ (HomeScreen)
             }
-        } catch (error) {
-            const message =
-                error.response && error.response.data.message
-                    ? err.response.data.message
-                    : "Tai khoan hoac mat khau khong dung!";
+        } catch (error) { 
+            // Đã sửa 'err' thành 'error' để bắt lỗi chính xác
+            const message = error.response && error.response.data.message
+                    ? error.response.data.message
+                    : "Tài khoản hoặc mật khẩu không đúng!";
             setError(message);
         }
     };
 
     return (
         <Container className="mt-5" style={{ maxWidth: "400px" }}>
-            <h2>Login</h2>
+            <h2>Đăng nhập</h2>
             {error && (
-                <Alert variant="danger" className="py-2 text-center smaill">
+                <Alert variant="danger" className="py-2 text-center small">
                     {error}
                 </Alert>
             )}
@@ -48,6 +48,7 @@ const LoginScreen = () => {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -56,13 +57,15 @@ const LoginScreen = () => {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </Form.Group>
-                <Button type="submit" variant="primary">
+                <Button type="submit" variant="primary" className="w-100">
                     Đăng nhập
                 </Button>
             </Form>
         </Container>
     );
 };
+
 export default LoginScreen;
