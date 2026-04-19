@@ -1,43 +1,43 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
-import { fileURLToPath } from 'url'; // Thêm dòng này
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 
-// Các dòng import Models giữ nguyên...
+// Import Models
 import User from './models/User.js';
 import Category from './models/Category.js';
 import Product from './models/Product.js';
 import Order from './models/Order.js';
 import { users, categories, products } from './data.js';
 
-// Đoạn code để lấy đường dẫn chính xác của thư mục backend
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Sửa lại dòng này: Tìm file .env nằm CÙNG thư mục với file seeder.js này
+// Cấu hình dotenv để đọc file .env
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Kết nối Database
 connectDB();
 
-// ... các phần importData và destroyData giữ nguyên bên dưới
 const importData = async () => {
   try {
-    // 1. Dọn dẹp sạch sẽ rác cũ
+    // 1. Xóa sạch dữ liệu cũ trong kho (Database)
     await Order.deleteMany();
     await Product.deleteMany();
-    await Category.deleteMany(); // Đã thêm Category
+    await Category.deleteMany();
     await User.deleteMany();
 
-    // 2. Bơm dữ liệu mới vào (Dùng insertMany vì mật khẩu đã được mã hóa sẵn trong data.js)
+    // 2. Nạp dữ liệu mới từ data.js vào Database
+    // Vì Khiêm muốn dùng mật khẩu chữ thường, nên dùng insertMany là chuẩn nhất
     await User.insertMany(users);
-    await Category.insertMany(categories); // Đã thêm Category
+    await Category.insertMany(categories);
     await Product.insertMany(products);
 
-    console.log('✅ ĐÃ BƠM DỮ LIỆU LÊN MONGODB THÀNH CÔNG!');
+    console.log('✅ ĐÃ BƠM DỮ LIỆU CHỮ THƯỜNG LÊN MONGODB THÀNH CÔNG!');
     process.exit();
   } catch (error) {
-    console.error(`❌ LỖI: ${error.message}`);
+    console.error(`❌ LỖI KHI BƠM DỮ LIỆU: ${error.message}`);
     process.exit(1);
   }
 };
@@ -49,15 +49,15 @@ const destroyData = async () => {
     await Category.deleteMany();
     await User.deleteMany();
 
-    console.log("🗑️ Đã xóa sạch dữ liệu trong Database!");
+    console.log("🗑️ Đã dọn dẹp sạch sẽ Database!");
     process.exit();
   } catch (error) {
-    console.error(`❌ Lỗi khi xóa dữ liệu: ${error.message}`);
+    console.error(`❌ LỖI KHI XÓA: ${error.message}`);
     process.exit(1);
   }
 };
 
-// Kiểm tra tham số dòng lệnh
+// Kiểm tra lệnh chạy từ terminal
 if (process.argv[2] === "-d") {
   destroyData();
 } else {

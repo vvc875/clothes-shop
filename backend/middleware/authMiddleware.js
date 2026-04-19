@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
-import User from "../models/User.js"; // Nhớ thêm đuôi .js
+import User from "../models/User.js";
 
-// Thêm export vào trước const
 export const protect = asyncHandler(async (req, res, next) => {
     let token = req.headers.authorization?.startsWith("Bearer")
         ? req.headers.authorization.split(" ")[1]
@@ -23,14 +22,12 @@ export const protect = asyncHandler(async (req, res, next) => {
     }
 });
 
-// Thêm export vào trước const
+// SỬA CHỖ NÀY: Kiểm tra role === 'admin' thay vì isAdmin
 export const admin = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
+    if (req.user && req.user.role === 'admin') {
         next();
     } else {
         res.status(401);
         throw new Error("Bạn không phải Admin");
     }
 };
-
-// XÓA BỎ dòng module.exports cũ ở cuối file đi nhé!

@@ -1,6 +1,7 @@
 import productRoutes from "./productRoutes.js"; // Nhớ thêm đuôi .js
 import userRoutes from "./userRoutes.js";
 import orderRoutes from "./orderRoutes.js";
+import categoryRoutes from "./categoryRoutes.js";
 import path from "path";
 import multer from "multer";
 
@@ -42,6 +43,7 @@ function route(app) {
     app.use("/api/orders", orderRoutes);
     app.use("/api/products", productRoutes);
     app.use("/api/users", userRoutes);
+    app.use("/api/categories", categoryRoutes);
 
     app.get("/", (req, res) => {
         res.send("API của shop quần áo đang chạy...");

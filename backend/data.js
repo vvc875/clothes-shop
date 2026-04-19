@@ -12,7 +12,7 @@ const users = [
     email: "admin@example.com",
     // Lưu ý: Đây là mật khẩu 'password123' đã được băm (hash) bằng bcrypt
     // Nếu bạn để chữ 'password123' trần truồng ở đây, lát nữa đăng nhập hệ thống sẽ báo sai mật khẩu
-    password: "$2a$10$C/jA7x6tF/M3T7Y8U1G/KuvJ9B.uXwK.Q5i0I0K4k4.J653.K/N2y", 
+    password: "password", 
     role: "admin",
     phone: "0988888888",
     address: "Hà Nội"
@@ -21,7 +21,7 @@ const users = [
     _id: userId,
     name: "Quân Chung",
     email: "quan@example.com",
-    password: "$2a$10$C/jA7x6tF/M3T7Y8U1G/KuvJ9B.uXwK.Q5i0I0K4k4.J653.K/N2y", // password123
+    password: "password", // password123
     role: "user",
     phone: "0912345678",
     address: "123 Cách Mạng Tháng 8, TP.HCM"
@@ -30,7 +30,7 @@ const users = [
     _id: "60d5ec49c683261f2c456790",
     name: "Huong",
     email: "huong@example.com",
-    password: "$2a$10$C/jA7x6tF/M3T7Y8U1G/KuvJ9B.uXwK.Q5i0I0K4k4.J653.K/N2y", // password123
+    password: "password", // password123
     role: "user",
     phone: "0901234567",
     address: "Đà Nẵng"
