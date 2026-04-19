@@ -1,29 +1,36 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        isAdmin: { type: Boolean, required: true, default: false },
+
+        role: {
+            type: String,
+            enum: ["user", "admin"],
+            default: "user",
+        },
+
+        phone: { type: String, default: "" },
+        address: { type: String, default: "" },
     },
-    { timestamps: true },
+    {
+        timestamps: true,
+    },
 );
 
-// Hàm kiểm tra mật khẩu (dùng khi đăng nhập)
+// --- SỬA LẠI: So sánh trực tiếp chữ thường, KHÔNG dùng bcrypt nữa ---
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    return enteredPassword === this.password;
 };
 
-// Tự động mã hóa mật khẩu trước khi lưu vào DB
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        next();
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+// --- XÓA BỎ HOẶC KHÓA (COMMENT) TOÀN BỘ ĐOẠN PRE-SAVE ĐI ---
+/*
+userSchema.pre('save', async function (next) {
+  // Không băm biếc gì nữa cả
 });
+*/
 
 const User = mongoose.model("User", userSchema);
-module.exports = User;
+export default User;
