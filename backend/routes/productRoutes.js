@@ -1,21 +1,24 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+
+// 1. Đổi sang import và bắt buộc phải có đuôi .js
+import {
     getProducts,
     deleteProduct,
     createProduct,
     updateProduct,
-} = require("../controllers/productController");
+} from "../controllers/productController.js";
 
-const { protect, admin } = require("../middleware/authMiddleware");
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 // Đường dẫn: /api/products/:id
 router
     .route("/:id")
-    .put(protect, admin, updateProduct) // Đã có bảo mật
-    .delete(protect, admin, deleteProduct); // Đã có bảo mật
+    .put(protect, admin, updateProduct) 
+    .delete(protect, admin, deleteProduct); 
 
 // Đường dẫn: /api/products/
-router.route("/").get(getProducts).post(protect, admin, createProduct); // FIX: Thêm protect và admin vào đây!
+router.route("/").get(getProducts).post(protect, admin, createProduct); 
 
-module.exports = router;
+// 2. Đổi sang export default
+export default router;

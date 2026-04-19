@@ -1,9 +1,12 @@
-const asyncHandler = require("express-async-handler");
-const Order = require("../models/Order");
+import asyncHandler from "express-async-handler";
+import Order from "../models/Order.js"; // Nhớ đuôi .js nhé!
 
-const getOrders = asyncHandler(async (req, res) => {
+// @desc    Lấy tất cả đơn hàng
+// @route   GET /api/orders
+// @access  Private/Admin
+export const getOrders = asyncHandler(async (req, res) => {
     const orders = await Order.find({}).populate("user", "id name");
     res.json(orders);
 });
 
-module.exports = { getOrders };
+// Đã xóa dòng module.exports cũ

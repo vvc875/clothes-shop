@@ -1,8 +1,8 @@
-const asyncHandler = require("express-async-handler");
-const Product = require("../models/Product");
+import asyncHandler from "express-async-handler";
+import Product from "../models/Product.js"; // Bắt buộc phải có .js
 
 // @desc    Lấy tất cả sản phẩm (User & Admin đều dùng)
-const getProducts = asyncHandler(async (req, res) => {
+export const getProducts = asyncHandler(async (req, res) => {
     // 1. Phân trang
     const pageSize = 8; // Số sản phẩm trên một trang
     const page = Number(req.query.pageNumber) || 1; // Trang hiện tại (mặc định là 1)
@@ -11,7 +11,7 @@ const getProducts = asyncHandler(async (req, res) => {
     const keyword = req.query.keyword
         ? {
               $or: [
-                  { name: { $regex: req.query.keyword, $options: "i" } }, // Tìm theo tên (i: không phân biệt hoa thường)
+                  { name: { $regex: req.query.keyword, $options: "i" } }, // Tìm theo tên
                   { category: { $regex: req.query.keyword, $options: "i" } }, // Tìm theo danh mục
               ],
           }
@@ -26,11 +26,11 @@ const getProducts = asyncHandler(async (req, res) => {
         .skip(pageSize * (page - 1)); // Bỏ qua các sản phẩm của các trang trước
 
     // 5. Trả về dữ liệu
-    res.json({ products, page, pages: Math.ceil(count / pageSize) }); // Trả về danh sách, trang hiện tại, tổng số trang
+    res.json({ products, page, pages: Math.ceil(count / pageSize) }); 
 });
 
 // @desc    Xóa sản phẩm (Chỉ Admin)
-const deleteProduct = asyncHandler(async (req, res) => {
+export const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
         await product.deleteOne();
@@ -42,10 +42,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc    Tạo sản phẩm mới (Chỉ Admin)
-const createProduct = asyncHandler(async (req, res) => {
-    // Lấy toàn bộ dữ liệu từ Frontend gửi lên
-    const { name, price, description, image, brand, category, countInStock } =
-        req.body;
+export const createProduct = asyncHandler(async (req, res) => {
+    const { name, price, description, image, brand, category, countInStock } = req.body;
 
     const product = new Product({
         name: name || "Tên mặc định",
@@ -64,7 +62,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc    Cập nhật sản phẩm
-const updateProduct = asyncHandler(async (req, res) => {
+export const updateProduct = asyncHandler(async (req, res) => {
     const {
         name,
         price,
@@ -76,13 +74,11 @@ const updateProduct = asyncHandler(async (req, res) => {
         countInStock,
     } = req.body;
 
-    // Tìm sản phẩm theo ID
     const product = await Product.findById(req.params.id);
 
     if (product) {
-        // Cập nhật các trường dữ liệu nếu có dữ liệu mới gửi lên, nếu không thì giữ nguyên cũ
         product.name = name || product.name;
-        product.price = price || product.price; // Quan trọng: Đảm bảo trường price được cập nhật
+        product.price = price || product.price; 
         product.description = description || product.description;
         product.image = image || product.image;
         product.brand = brand || product.brand;
@@ -98,4 +94,4 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getProducts, deleteProduct, createProduct, updateProduct };
+// CHÚ Ý: Đã xóa dòng module.exports cũ ở đây

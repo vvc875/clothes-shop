@@ -1,10 +1,10 @@
-const productRoutes = require("./productRoutes"); // Đảm bảo đúng đường dẫn file
-const userRoutes = require("./userRoutes");
-const orderRoutes = require("./orderRoutes");
-const path = require("path");
-const multer = require("multer");
+import productRoutes from "./productRoutes.js"; // Nhớ thêm đuôi .js
+import userRoutes from "./userRoutes.js";
+import orderRoutes from "./orderRoutes.js";
+import path from "path";
+import multer from "multer";
 
-// Cấu hình Multer (Giữ nguyên logic của bạn)
+// Cấu hình Multer (Chuyển sang kiểu import)
 const storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, "uploads/");
@@ -19,15 +19,15 @@ const upload = multer({
     fileFilter: function (req, file, cb) {
         const filetypes = /jpg|jpeg|png/;
         const extname = filetypes.test(
-            path.extname(file.originalname).toLowerCase(),
+            path.extname(file.originalname).toLowerCase()
         );
         const mimetype = filetypes.test(file.mimetype);
         if (extname && mimetype) return cb(null, true);
-        cb("Lỗi: Chỉ chấp nhận file ảnh!");
+        cb(new Error("Lỗi: Chỉ chấp nhận file ảnh!"));
     },
 });
 
-// HÀM ROUTE CHÍNH
+// HÀM ROUTE CHÍNH (Sử dụng export default)
 function route(app) {
     // API Upload
     app.post("/api/upload", upload.single("image"), (req, res) => {
@@ -38,7 +38,7 @@ function route(app) {
         res.send(`/${req.file.path.replace(/\\/g, "/")}`);
     });
 
-    // API chính (Đăng nhập nằm trong userRoutes)
+    // API chính
     app.use("/api/orders", orderRoutes);
     app.use("/api/products", productRoutes);
     app.use("/api/users", userRoutes);
@@ -48,4 +48,4 @@ function route(app) {
     });
 }
 
-module.exports = route;
+export default route; // Thay cho module.exports = route

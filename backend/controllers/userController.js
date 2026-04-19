@@ -1,15 +1,16 @@
-const asyncHandler = require("express-async-handler");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
+import asyncHandler from "express-async-handler";
+import User from "../models/User.js"; // Đừng quên đuôi .js nhé
+import jwt from "jsonwebtoken";
 
-// Hàm tạo Token
+// Hàm tạo Token (Giữ nội bộ trong file này nên không cần export cũng được)
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 // @desc    Đăng nhập & lấy token
 // @route   POST /api/users/login
-const authUser = asyncHandler(async (req, res) => {
+// @access  Public
+export const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
@@ -27,9 +28,12 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-const getUsers = asyncHandler(async (req, res) => {
+// @desc    Lấy tất cả người dùng
+// @route   GET /api/users
+// @access  Private/Admin
+export const getUsers = asyncHandler(async (req, res) => {
     const users = await User.find({}).select("-password");
     res.json(users);
 });
 
-module.exports = { authUser };
+// Đã xóa module.exports cũ

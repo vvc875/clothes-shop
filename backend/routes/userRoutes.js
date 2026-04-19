@@ -1,8 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { authUser } = require("../controllers/userController");
+
+// Nhớ phải có đuôi .js ở đây nữa nhé
+import { authUser } from "../controllers/userController.js";
 
 // Đường dẫn: POST /api/users/login
 router.post("/login", authUser);
 
-module.exports = router;
+// ĐÂY LÀ DÒNG QUAN TRỌNG NHẤT - CỨU CÁNH CỦA BẠN
+export default router;

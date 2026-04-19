@@ -1,8 +1,10 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { getOrders } = require("../controllers/orderController");
-const { protect, admin } = require("../middleware/authMiddleware");
+
+// Nhớ phải có đuôi .js ở cuối nhé!
+import { getOrders } from "../controllers/orderController.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 router.route("/").get(protect, admin, getOrders);
 
-module.exports = router;
+export default router;

@@ -1,8 +1,9 @@
-const jwt = require("jsonwebtoken");
-const asyncHandler = require("express-async-handler");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import asyncHandler from "express-async-handler";
+import User from "../models/User.js"; // Nhớ thêm đuôi .js
 
-const protect = asyncHandler(async (req, res, next) => {
+// Thêm export vào trước const
+export const protect = asyncHandler(async (req, res, next) => {
     let token = req.headers.authorization?.startsWith("Bearer")
         ? req.headers.authorization.split(" ")[1]
         : null;
@@ -22,7 +23,8 @@ const protect = asyncHandler(async (req, res, next) => {
     }
 });
 
-const admin = (req, res, next) => {
+// Thêm export vào trước const
+export const admin = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
         next();
     } else {
@@ -31,4 +33,4 @@ const admin = (req, res, next) => {
     }
 };
 
-module.exports = { protect, admin };
+// XÓA BỎ dòng module.exports cũ ở cuối file đi nhé!
