@@ -1,15 +1,17 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const connectDB = async () => {
-    try {
-        // Kết nối tới MongoDB bằng đường dẫn trong file .env
-        const conn = await mongoose.connect(process.env.MONGO_URI);
-
-        console.log(`Đã kết nối MongoDB: ${conn.connection.host}`);
-    } catch (error) {
-        console.error(`Lỗi kết nối: ${error.message}`);
-        process.exit(1); // Dừng chương trình nếu không kết nối được
-    }
+  try {
+    console.log('🚀 Đang thử kết nối thẳng bằng link...');
+    
+    // Dán thẳng link của bạn vào đây
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    
+    console.log(`✅ Kết nối thành công tới Host: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`❌ Lỗi kết nối: ${error.message}`);
+    process.exit(1);
+  }
 };
 
-module.exports = connectDB;
+export default connectDB;
