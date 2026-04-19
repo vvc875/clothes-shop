@@ -13,9 +13,14 @@ import ProductListScreen from "./screens/admin/ProductListScreen";
 import UserListScreen from "./screens/admin/UserListScreen";
 import OrderListScreen from "./screens/admin/OrderListScreen";
 
-// --- Components chung ---
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
+// --- 🛠️ ĐÃ CẬP NHẬT COMPONENTS ĐÚNG THƯ MỤC ---
+// 1. Components của Admin
+import Sidebar from "./components/admin/Sidebar";
+import Header from "./components/admin/Header";
+
+// 2. Components của Khách hàng
+import CustomerHeader from "./components/customer/CustomerHeader";
+import CustomerFooter from "./components/customer/CustomerFooter";
 
 function App() {
     return (
@@ -25,21 +30,26 @@ function App() {
                 <Route path="/" element={<LoginScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
 
-                {/* 2. LUỒNG KHÁCH HÀNG (Đổi nhà của khách sang đường dẫn "/home") */}
+                {/* 2. LUỒNG KHÁCH HÀNG */}
                 <Route
                     path="/home/*"
                     element={
-                        <>
-                            <Header />
-                            <main className="py-3">
+                        // Thêm class flex để đẩy Footer xuống sát đáy trang
+                        <div className="d-flex flex-column min-vh-100">
+                            {/* Đã thay bằng Header xịn của khách hàng */}
+                            <CustomerHeader /> 
+                            
+                            <main className="py-3 flex-grow-1">
                                 <Routes>
-                                    {/* Để path="" vì nó đã kế thừa chữ /home ở trên */}
                                     <Route path="" element={<HomeScreen />} />
                                     <Route path="product/:id" element={<ProductScreen />} />
                                     <Route path="cart/:id?" element={<CartScreen />} />
                                 </Routes>
                             </main>
-                        </>
+
+                            {/* Đã thêm Footer xịn của khách hàng */}
+                            <CustomerFooter />
+                        </div>
                     }
                 />
 

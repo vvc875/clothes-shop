@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import ProductCard from '../../components/ProductCard';
+import ProductCard from "../../components/customer/ProductCard";
 
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
